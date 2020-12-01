@@ -10,6 +10,9 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+const passport = require("passport");
+app.use(passport.initialize());
+
 // 라우터 모음
 app.use(require("./routes/index"));
 

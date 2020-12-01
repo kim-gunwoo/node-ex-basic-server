@@ -6,8 +6,7 @@
 
 ## dependencies
 - 2020.12.01
-express cors passport bcrypt jsonwebtoken sequelize mysql2 mariadb
-
+express cors bcrypt sequelize mysql2 mariadb passport passport-local passport-jwt jsonwebtoken
 
 ## devDependencies
 - 2020.12.01
