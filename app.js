@@ -11,7 +11,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 const passport = require("passport");
+const passportConfig = require("./passport");
 app.use(passport.initialize());
+passportConfig();
 
 // 라우터 모음
 app.use(require("./routes/index"));
