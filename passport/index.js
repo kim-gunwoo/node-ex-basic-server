@@ -29,14 +29,13 @@ const passportVerify = async (email, passwd, done) => {
   }
 };
 
-/*
+const Config = require("../config/config");
+
 const ExtractJWT = passportJWT.ExtractJwt;
 const JWTConfig = {
   jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
-  secretOrKey: "jwt-secret-key",
+  secretOrKey: Config.SECREAT_KEY,
 };
-*/
-const Config = require("../config/config");
 
 const JWTVerify = async (jwtPayload, done) => {
   try {
@@ -55,5 +54,5 @@ const JWTVerify = async (jwtPayload, done) => {
 
 module.exports = () => {
   passport.use("local", new LocalStrategy(passportConfig, passportVerify));
-  passport.use("jwt", new JWTStrategy(Config, JWTVerify));
+  passport.use("jwt", new JWTStrategy(JWTConfig, JWTVerify));
 };

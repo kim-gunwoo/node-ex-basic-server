@@ -24,7 +24,7 @@ router.post("/signin", async (req, res, next) => {
         // JWT생성 후 반환
         const token = jwt.sign(
           { email: user.email, name: user.usernm },
-          Config.secretOrKey
+          Config.SECREAT_KEY
         );
         res.json({ token });
       });
@@ -49,7 +49,7 @@ router.post("/signup", async (req, res, next) => {
       return;
     }
 
-    await bcrypt.hash(passwd, Config.saltRounds, async (err, hash) => {
+    await bcrypt.hash(passwd, Config.SALT_ROUND, async (err, hash) => {
       if (err) return res.status(500).json({ err: err.message });
 
       const user = await User.create({
