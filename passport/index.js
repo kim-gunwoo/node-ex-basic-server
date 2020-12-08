@@ -34,7 +34,7 @@ const Config = require("../config/config");
 const ExtractJWT = passportJWT.ExtractJwt;
 const JWTConfig = {
   jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
-  secretOrKey: Config.SECREAT_KEY,
+  secretOrKey: Config.SECRET_KEY,
 };
 
 const JWTVerify = async (jwtPayload, done) => {

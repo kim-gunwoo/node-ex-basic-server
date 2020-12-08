@@ -26,6 +26,11 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING(200),
         comment: "암호",
       },
+      useyn: {
+        type: DataTypes.CHAR(1),
+        default: "N",
+        comment: "사용여부",
+      },
     }
   );
 };

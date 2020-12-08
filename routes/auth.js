@@ -24,7 +24,7 @@ router.post("/signin", async (req, res, next) => {
         // JWT생성 후 반환
         const token = jwt.sign(
           { email: user.email, name: user.usernm },
-          Config.SECREAT_KEY
+          Config.SECRET_KEY
         );
         res.json({ token });
       });

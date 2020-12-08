@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
         comment: "제목",
       },
       content: {
-        type: DataTypes.STRING(500),
+        type: DataTypes.TEXT,
         comment: "내용",
       },
       writeid: {
