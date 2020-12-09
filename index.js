@@ -7,7 +7,8 @@ const sequelize = require("./models").sequelize;
 // force : true 테이블이 존재할 경우 삭제후 재생성
 // .sync({ force: true })
 sequelize
-  .sync()
+  //.sync()
+  .sync({ force: true })
   .then(() => {
     console.log("db connection success");
   })

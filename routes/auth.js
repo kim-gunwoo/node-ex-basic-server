@@ -4,8 +4,10 @@ const passport = require("passport");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const Config = require("../config/config");
-
-const User = require("../models/").user_tb;
+const mail = require("../template/mail");
+const models = require("../models/");
+const User = models.user_tb;
+const sequelize = models.sequelize;
 
 router.post("/signin", async (req, res, next) => {
   try {
@@ -36,13 +38,16 @@ router.post("/signin", async (req, res, next) => {
 });
 
 router.post("/signup", async (req, res, next) => {
+  let transaction;
   const signUser = req.body;
 
   const email = signUser.email;
   const usernm = signUser.usernm;
   const passwd = signUser.passwd;
   try {
-    const user = await User.findOne({ where: { email: email } });
+    transaction = await sequelize.transaction();
+
+    const user = await User.findOne({ where: { email: email }, transaction });
 
     if (user) {
       res.json({ message: "등록된 사용자가 존재합니다." });
@@ -52,15 +57,24 @@ router.post("/signup", async (req, res, next) => {
     await bcrypt.hash(passwd, Config.SALT_ROUND, async (err, hash) => {
       if (err) return res.status(500).json({ err: err.message });
 
-      const user = await User.create({
-        usernm: usernm,
-        email: email,
-        passwd: hash,
+      const user = await User.create(
+        {
+          usernm: usernm,
+          email: email,
+          passwd: hash,
+        },
+        { transaction }
+      );
+
+      await mail.signup(req, res, transaction).catch((err) => {
+        transaction.rollback();
+        next(err);
       });
 
-      res.json(user);
+      //res.json(user);
     });
   } catch (err) {
+    await transaction.rollback();
     next(err);
   }
 });
