@@ -45,18 +45,17 @@ module.exports = {
       next(err);
     }
   },
-  async signup(req, res, transaction) {
-    const signUser = req.body;
-
-    const email = encodeURIComponent(signUser.email);
-    const usernm = signUser.usernm;
-    const passwd = encodeURIComponent(signUser.passwd);
+  async signup(user, res, transaction) {
+    const email = encodeURIComponent(user.email);
+    const usernm = user.usernm;
+    const passwd = encodeURIComponent(user.passwd);
+    const verifypin = user.verifypin;
 
     try {
       // 수신 메일 주소
-      let email = "1z3803@naver.com";
+      let toeMail = "1z3803@naver.com";
       let subject = "회원가입 메일 발송";
-      let text = `${usernm}메일 발송. ${email} , ${passwd}`;
+      let contents = `<a href=http://localhost:8000/auth/verity/${verifypin} >메일 인증 하기</a>`;
 
       let transporter = nodemailer.createTransport({
         service: NODEMAILER_SERVICE,
@@ -70,9 +69,10 @@ module.exports = {
 
       let mailOptions = {
         from: NODEMAILER_USER,
-        to: email, // 수신 메일 주소
+        to: toeMail,
         subject: subject,
-        text: text,
+        //text: contents,
+        html: contents,
       };
 
       await transporter.sendMail(mailOptions, (err, info) => {

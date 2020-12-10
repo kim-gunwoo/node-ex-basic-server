@@ -1,5 +1,5 @@
 module.exports = Config = {
-  SECREAT_KEY: "jwt 암호 키 입력",
+  SECRET_KEY: "jwt 암호 키 입력",
   SALT_ROUND: "bcrypt salt cost 숫자 입력",
   NODEMAILER_SERVICE: "메일서버 이름 ex) gmail, naver",
   NODEMAILER_HOST: "메일서버 주소 ex) smtp.naver.com",

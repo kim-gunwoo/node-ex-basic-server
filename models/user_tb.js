@@ -23,12 +23,16 @@ module.exports = (sequelize, DataTypes) => {
         comment: "이메일주소",
       },
       passwd: {
-        type: DataTypes.STRING(200),
+        type: DataTypes.STRING(300),
         comment: "암호",
+      },
+      verifypin: {
+        type: DataTypes.STRING(300),
+        comment: "체크용암호",
       },
       useyn: {
         type: DataTypes.CHAR(1),
-        default: "N",
+        defaultValue: "N",
         comment: "사용여부",
       },
     }

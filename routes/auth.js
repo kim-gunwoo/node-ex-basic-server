@@ -9,6 +9,8 @@ const models = require("../models/");
 const User = models.user_tb;
 const sequelize = models.sequelize;
 
+const createrandom = require("../template/random-generate");
+
 router.post("/signin", async (req, res, next) => {
   try {
     passport.authenticate("local", (err, user, info) => {
@@ -54,6 +56,8 @@ router.post("/signup", async (req, res, next) => {
       return;
     }
 
+    const random_pin = createrandom.generate();
+
     await bcrypt.hash(passwd, Config.SALT_ROUND, async (err, hash) => {
       if (err) return res.status(500).json({ err: err.message });
 
@@ -62,16 +66,15 @@ router.post("/signup", async (req, res, next) => {
           usernm: usernm,
           email: email,
           passwd: hash,
+          verifypin: random_pin,
         },
         { transaction }
       );
 
-      await mail.signup(req, res, transaction).catch((err) => {
+      await mail.signup(user.dataValues, res, transaction).catch((err) => {
         transaction.rollback();
         next(err);
       });
-
-      //res.json(user);
     });
   } catch (err) {
     await transaction.rollback();

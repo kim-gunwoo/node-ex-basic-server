@@ -16,6 +16,10 @@ const passportVerify = async (email, passwd, done) => {
       return;
     }
 
+    if (user.useyn === "N") {
+      done(null, false, { message: "사용자인증이 완료되지 않았습니다." });
+    }
+
     const compareResult = await bcrypt.compare(passwd, user.passwd);
 
     if (compareResult) {
