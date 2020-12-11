@@ -49,13 +49,14 @@ module.exports = {
     const email = encodeURIComponent(user.email);
     const usernm = user.usernm;
     const passwd = encodeURIComponent(user.passwd);
+    const verifyid = user.verifyid;
     const verifypin = user.verifypin;
 
     try {
       // 수신 메일 주소
       let toeMail = "1z3803@naver.com";
       let subject = "회원가입 메일 발송";
-      let contents = `<a href=http://localhost:8000/auth/verity/${verifypin} >메일 인증 하기</a>`;
+      let contents = `<a href=http://localhost:8000/auth/verify/${verifyid}/pin/${verifypin} >메일 인증 하기</a>`;
 
       let transporter = nodemailer.createTransport({
         service: NODEMAILER_SERVICE,

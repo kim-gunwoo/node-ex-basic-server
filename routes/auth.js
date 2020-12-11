@@ -10,6 +10,7 @@ const User = models.user_tb;
 const sequelize = models.sequelize;
 
 const createrandom = require("../template/random-generate");
+const htmltemplate = require("../template/htmltemplate");
 
 router.post("/signin", async (req, res, next) => {
   try {
@@ -56,8 +57,6 @@ router.post("/signup", async (req, res, next) => {
       return;
     }
 
-    const random_pin = createrandom.generate();
-
     await bcrypt.hash(passwd, Config.SALT_ROUND, async (err, hash) => {
       if (err) return res.status(500).json({ err: err.message });
 
@@ -66,7 +65,8 @@ router.post("/signup", async (req, res, next) => {
           usernm: usernm,
           email: email,
           passwd: hash,
-          verifypin: random_pin,
+          verifyid: createrandom.generate(),
+          verifypin: createrandom.generate(),
         },
         { transaction }
       );
@@ -79,6 +79,40 @@ router.post("/signup", async (req, res, next) => {
   } catch (err) {
     await transaction.rollback();
     next(err);
+  }
+});
+
+router.get("/verify/:id/pin/:pin", async (req, res, next) => {
+  const id = req.params.id;
+  const pin = req.params.pin;
+  let transaction;
+
+  try {
+    transaction = await sequelize.transaction();
+
+    const user = await User.findOne({ where: { verifyid: id }, transaction });
+
+    if (!user) {
+      res.send(htmltemplate.sendHtml("인증정보가 잘못되었습니다."));
+      return;
+    }
+
+    if (pin !== user.verifypin) {
+      res.send(htmltemplate.sendHtml("인증키가 바르지 않습니다."));
+      return;
+    }
+
+    await User.update(
+      {
+        useyn: "Y", //, verifyid: "", verifypin: ""
+      },
+      { where: { email: user.dataValues.email }, transaction }
+    );
+    transaction.commit();
+    res.send(htmltemplate.sendHtml("인증이 완료되었습니다."));
+  } catch (err) {
+    await transaction.rollback();
+    res.send(htmltemplate.sendHtml(err));
   }
 });
 

@@ -26,9 +26,13 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING(300),
         comment: "암호",
       },
+      verifyid: {
+        type: DataTypes.STRING(300),
+        comment: "인증아이디",
+      },
       verifypin: {
         type: DataTypes.STRING(300),
-        comment: "체크용암호",
+        comment: "인증암호",
       },
       useyn: {
         type: DataTypes.CHAR(1),
