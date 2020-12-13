@@ -104,7 +104,9 @@ router.get("/verify/:id/pin/:pin", async (req, res, next) => {
 
     await User.update(
       {
-        useyn: "Y", //, verifyid: "", verifypin: ""
+        useyn: "Y",
+        verifyid: "",
+        verifypin: "",
       },
       { where: { email: user.dataValues.email }, transaction }
     );

@@ -33,6 +33,7 @@ module.exports = (sequelize, DataTypes) => {
       priv_yn: {
         type: DataTypes.STRING(100),
         comment: "숨김여부",
+        defaultValue: "N",
       },
     }
   );
