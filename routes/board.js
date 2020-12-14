@@ -49,4 +49,53 @@ router.post("/", async (req, res, next) => {
   }
 });
 
+router.patch("/:bno", async (req, res, next) => {
+  let transaction;
+  const board = req.body;
+  const bno = req.params.bno;
+  const title = board.title;
+  const content = board.content;
+  const writeid = board.writeid;
+  const passwd = board.passwd;
+  const priv_yn = board.priv_yn;
+
+  try {
+    transaction = await sequelize.transaction();
+
+    const board = await Board.update(
+      { title, content, writeid, passwd, priv_yn },
+      { where: { bno }, transaction }
+    );
+
+    transaction.commit();
+    res.json(board);
+  } catch (error) {
+    transaction.rollback();
+    next(error);
+  }
+});
+
+router.delete("/:bno", async (req, res, next) => {
+  let transaction;
+  const board = req.body;
+  const bno = req.params.bno;
+  const title = board.title;
+  const content = board.content;
+  const writeid = board.writeid;
+  const passwd = board.passwd;
+  const priv_yn = board.priv_yn;
+
+  try {
+    transaction = await sequelize.transaction();
+
+    const board = await Board.destroy({ where: { bno }, transaction });
+
+    transaction.commit();
+    res.json(board);
+  } catch (error) {
+    transaction.rollback();
+    next(error);
+  }
+});
+
 module.exports = router;
